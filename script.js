@@ -49,7 +49,10 @@ createButtons();
 
 function displayContent(event) {
     const expression = document.getElementById("expression");
+    const errorP = document.getElementById("error");
     let arr = expression.innerText.split(" ");
+
+    errorP.innerText = "";
 
     if(event.target.tagName == "DIV") {
         if(event.target.children[0].innerText == "Clear") {
@@ -119,19 +122,28 @@ function back() {
 function calculate(where) {
     const expression = document.getElementById("expression");
     const resultP = document.getElementById("result");
+    const errorP = document.getElementById("error");
     let result = "";
 
     if("+-÷×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
     
     
     const arr = expression.textContent.split(" ");
-    if(arr.length == 1) result = expression.textContent;
+    if(arr.length == 1) return;
 
     if(arr[1] == "+") result += Number(arr[0]) + Number(arr[2]);
-    if(arr[1] == "-") result += Number(arr[0]) - Number(arr[2]);
-    if(arr[1] == "×") result += Number(arr[0]) * Number(arr[2]);
-    if(arr[1] == "÷") result += Number(arr[0]) / Number(arr[2]);
-
+    else if(arr[1] == "-") result += Number(arr[0]) - Number(arr[2]);
+    else if(arr[1] == "×") result += Number(arr[0]) * Number(arr[2]);
+    else {
+        if(arr[2] == "0") {
+            errorP.textContent = "Error: Division by zero!";
+            expression.textContent = "";
+            resultP.textContent - "";
+            return
+        }
+        result += Number(arr[0]) / Number(arr[2]);
+    }
+    console.log(result)
     if(where == "expression") expression.innerText = result;
     else resultP.innerText = "= " + result;
 }
