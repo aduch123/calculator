@@ -32,7 +32,7 @@ function createButtons() {
 
     //operators
     for(let i = 0; i < 5; ++i) {
-        let operators = ["+", "-", "×", "/", "="];
+        let operators = ["+", "-", "×", "÷", "="];
         const op = document.createElement("div");
         const p = document.createElement("p");
 
@@ -67,7 +67,8 @@ function displayContent(event) {
 
         if(event.target.classList == "num") expression.textContent += event.target.children[0].innerText;
         else {
-            if("+-/×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            if("+-÷×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            calculate("expression");
             expression.textContent += " " + event.target.children[0].innerText + " ";
         }
     } else {
@@ -86,7 +87,8 @@ function displayContent(event) {
 
         if(event.target.parentElement.classList == "num") expression.textContent += event.target.innerText; 
         else {
-            if("+-/×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            if("+-÷×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            calculate("expression");
             expression.textContent += " " + event.target.innerText + " ";
         }
     }
@@ -94,13 +96,42 @@ function displayContent(event) {
 
 function clear() {
     const expression = document.getElementById("expression");
+    const resultP = document.getElementById("result");
     expression.innerText = "";
+    resultP.innerText = "";
 }
 
 function back() {
     const expression = document.getElementById("expression");
+    const resultP = document.getElementById("result");
+
+    if(resultP.innerText != "") {
+        expression.innerText = "";
+        resultP.innerText = "";
+        return;
+    }
     let arr = expression.innerText.split(" ");
     arr.pop();
     expression.textContent = arr.join(" ");
-    if("+-/×".includes(expression.textContent.at(-1))) expression.textContent += " ";
+    if("+-÷×".includes(expression.textContent.at(-1))) expression.textContent += " ";
+}
+
+function calculate(where) {
+    const expression = document.getElementById("expression");
+    const resultP = document.getElementById("result");
+    let result = "";
+
+    if("+-÷×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+    
+    
+    const arr = expression.textContent.split(" ");
+    if(arr.length == 1) result = expression.textContent;
+
+    if(arr[1] == "+") result += Number(arr[0]) + Number(arr[2]);
+    if(arr[1] == "-") result += Number(arr[0]) - Number(arr[2]);
+    if(arr[1] == "×") result += Number(arr[0]) * Number(arr[2]);
+    if(arr[1] == "÷") result += Number(arr[0]) / Number(arr[2]);
+
+    if(where == "expression") expression.innerText = result;
+    else resultP.innerText = "= " + result;
 }
