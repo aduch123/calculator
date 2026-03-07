@@ -20,7 +20,7 @@ function createButtons() {
                     p.innerText = 0;
                     break;
                 case 11:
-                    p.innerText = "Delete";
+                    p.innerText = "⌫";
                     p.style.fontSize = "16px";
                     break;
             }
@@ -47,3 +47,15 @@ function createButtons() {
 
 createButtons();
 
+function displayContent(event) {
+    const expression = document.getElementById("expression");
+    let arr = expression.innerText.split(" ");
+
+    if(event.target.tagName == "DIV") {
+        if(event.target.classList == "num") expression.textContent += event.target.children[0].innerText;
+        else expression.textContent += " " + event.target.children[0].innerText + " ";
+    } else {
+        if(event.target.parentElement.classList == "num") expression.textContent += event.target.innerText; 
+        else expression.textContent += " " + event.target.innerText + " "; 
+    }
+}
