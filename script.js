@@ -52,10 +52,55 @@ function displayContent(event) {
     let arr = expression.innerText.split(" ");
 
     if(event.target.tagName == "DIV") {
+        if(event.target.children[0].innerText == "Clear") {
+            clear();
+            return;
+        }
+        else if(event.target.children[0].innerText == "⌫") {
+            back();
+            return;
+        }
+        else if(event.target.children[0].innerText == "=") {
+            calculate();
+            return;
+        }
+
         if(event.target.classList == "num") expression.textContent += event.target.children[0].innerText;
-        else expression.textContent += " " + event.target.children[0].innerText + " ";
+        else {
+            if("+-/×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            expression.textContent += " " + event.target.children[0].innerText + " ";
+        }
     } else {
+        if(event.target.innerText == "Clear") {
+            clear();
+            return;
+        }
+        else if(event.target.innerText == "⌫") {
+            back();
+            return;
+        }
+        else if(event.target.innerText == "=") {
+            calculate();
+            return;
+        }
+
         if(event.target.parentElement.classList == "num") expression.textContent += event.target.innerText; 
-        else expression.textContent += " " + event.target.innerText + " "; 
+        else {
+            if("+-/×".includes(expression.innerText.at(-1)) || expression.textContent == "") return
+            expression.textContent += " " + event.target.innerText + " ";
+        }
     }
+}
+
+function clear() {
+    const expression = document.getElementById("expression");
+    expression.innerText = "";
+}
+
+function back() {
+    const expression = document.getElementById("expression");
+    let arr = expression.innerText.split(" ");
+    arr.pop();
+    expression.textContent = arr.join(" ");
+    if("+-/×".includes(expression.textContent.at(-1))) expression.textContent += " ";
 }
